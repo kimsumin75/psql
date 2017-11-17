@@ -1,0 +1,10 @@
+select pid
+     , application_name as source
+     , age(now(), query_start) as running_for
+     
+     , query as query
+from   pg_stat_activity
+where  query <> '<insufficient privilege>'
+and    state <> 'idle' and pid <> pg_backend_pid()
+order by 3 desc
+;
