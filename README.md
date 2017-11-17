@@ -1,1 +1,1 @@
-# psql
+# SQL Scripts 
