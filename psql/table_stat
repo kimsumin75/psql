@@ -7,19 +7,19 @@ select n.nspname
      , pg_stat_get_last_autovacuum_time(c.oid) AS last_autovacuum
      , pg_stat_get_last_analyze_time(c.oid) AS last_analyze
      , pg_stat_get_last_autoanalyze_time(c.oid) AS last_autoanalyze
-     
-     
-     
-     
+     --, pg_stat_get_vacuum_count(c.oid) AS vacuum_count
+     --, pg_stat_get_autovacuum_count(c.oid) AS autovacuum_count
+     --, pg_stat_get_analyze_count(c.oid) AS analyze_count
+     --, pg_stat_get_autoanalyze_count(c.oid) AS autoanalyze_count     
      , c.reltuples::bigint as "estimated rows"
-     
-     
-     
+     --, pg_stat_get_vacuum_count(c.oid)
+     --, pg_stat_get_tuples_inserted(c.oid) AS n_tup_ins
+     --, pg_stat_get_tuples_updated(c.oid) AS n_tup_upd 
      , pg_stat_get_tuples_deleted(c.oid) AS n_tup_del
-     
+     --, pg_stat_get_tuples_hot_updated(c.oid) AS n_tup_hot_upd 
      , pg_stat_get_live_tuples(c.oid) AS n_live_tup
      , pg_stat_get_dead_tuples(c.oid) AS n_dead_tup
-     
+     --, pg_stat_get_mod_since_analyze(c.oid) AS n_mod_since_analyze     
 from   pg_class c
        left join pg_namespace n
          on n.oid = c.relnamespace
