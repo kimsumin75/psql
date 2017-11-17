@@ -1,0 +1,29 @@
+select n.nspname
+     , c.relname
+     , pg_size_pretty(pg_relation_size(c.oid)) as "table_size"
+     , pg_size_pretty(pg_total_relation_size(c.oid)-pg_relation_size(c.oid)) as "index_size"
+     , pg_size_pretty(pg_total_relation_size(c.oid)) as "total_size"
+     , pg_stat_get_last_vacuum_time(c.oid) AS last_vacuum
+     , pg_stat_get_last_autovacuum_time(c.oid) AS last_autovacuum
+     , pg_stat_get_last_analyze_time(c.oid) AS last_analyze
+     , pg_stat_get_last_autoanalyze_time(c.oid) AS last_autoanalyze
+     
+     
+     
+     
+     , c.reltuples::bigint as "estimated rows"
+     
+     
+     
+     , pg_stat_get_tuples_deleted(c.oid) AS n_tup_del
+     
+     , pg_stat_get_live_tuples(c.oid) AS n_live_tup
+     , pg_stat_get_dead_tuples(c.oid) AS n_dead_tup
+     
+from   pg_class c
+       left join pg_namespace n
+         on n.oid = c.relnamespace
+where  n.nspname not in ( 'pg_catalog', 'information_schema' )
+and    c.relkind = any(array['r'])
+order by pg_relation_size(c.oid) desc
+;
